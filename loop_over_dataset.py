@@ -24,42 +24,46 @@ import matplotlib.pyplot as plt
 import copy
 
 ## Add current working directory to path
-sys.path.append(os.getcwd())
+#sys.path.append(os.getcwd())
 
 ## Waymo open dataset reader
-from tools.waymo_reader.simple_waymo_open_dataset_reader import utils as waymo_utils
-from tools.waymo_reader.simple_waymo_open_dataset_reader import WaymoDataFileReader, dataset_pb2, label_pb2
-
-## 3d object detection
-import student.objdet_pcl as pcl
-import student.objdet_detect as det
-import student.objdet_eval as eval
+from tool.waymo_reader.simple_waymo_open_dataset_reader import utils as waymo_utils
+from tool.waymo_reader.simple_waymo_open_dataset_reader import WaymoDataFileReader, dataset_pb2, label_pb2
 
 import misc.objdet_tools as tools 
 from misc.helpers import save_object_to_file, load_object_from_file, make_exec_list
 
+## 3d object detection
+import fusion.objdet_pcl as pcl
+import fusion.objdet_detect as det
+import fusion.objdet_evals as evals
+
+"""
 ## Tracking
-from student.filter import Filter
-from student.trackmanagement import Trackmanagement
-from student.association import Association
-from student.measurements import Sensor, Measurement
+from fusion.filter import Filter
+from fusion.trackmanagement import Trackmanagement
+from fusion.association import Association
+from fusion.measurements import Sensor, Measurement
 from misc.evaluation import plot_tracks, plot_rmse, make_movie
 import misc.params as params 
- 
+"""
 ##################
 ## Set parameters and perform initializations
 
 ## Select Waymo Open Dataset file and frame numbers
-data_filename = 'training_segment-1005081002024129653_5313_150_5333_150_with_camera_labels.tfrecord' # Sequence 1
+#data_filename = 'training_segment-1005081002024129653_5313_150_5333_150_with_camera_labels.tfrecord' # Sequence 1
 # data_filename = 'training_segment-10072231702153043603_5725_000_5745_000_with_camera_labels.tfrecord' # Sequence 2
 # data_filename = 'training_segment-10963653239323173269_1924_000_1944_000_with_camera_labels.tfrecord' # Sequence 3
-show_only_frames = [0, 200] # show only frames in interval for debugging
+data_filename = './training/training_segment-10017090168044687777_6380_000_6400_000_with_camera_labels.tfrecord'
+show_only_frames = [0, 1] # show only frames in interval for debugging
 
 ## Prepare Waymo Open Dataset file for loading
-data_fullpath = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'dataset', data_filename) # adjustable path in case this script is called from another working directory
-results_fullpath = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'results')
-datafile = WaymoDataFileReader(data_fullpath)
+#data_fullpath = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'dataset', data_filename) # adjustable path in case this script is called from another working directory
+#results_fullpath = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'results')
+#datafile = WaymoDataFileReader(data_fullpath)
+datafile = WaymoDataFileReader(data_filename)
 datafile_iter = iter(datafile)  # initialize dataset iterator
+
 
 ## Initialize object detection
 configs_det = det.load_configs(model_name='fpn_resnet') # options are 'darknet', 'fpn_resnet'
@@ -79,12 +83,17 @@ camera = None # init camera sensor object
 np.random.seed(10) # make random values predictable
 
 ## Selective execution and visualization
-exec_detection = ['bev_from_pcl', 'detect_objects', 'validate_object_labels', 'measure_detection_performance'] # options are 'bev_from_pcl', 'detect_objects', 'validate_object_labels', 'measure_detection_performance'; options not in the list will be loaded from file
-exec_tracking = [] # options are 'perform_tracking'
-exec_visualization = [] # options are 'show_range_image', 'show_bev', 'show_pcl', 'show_labels_in_image', 'show_objects_and_labels_in_bev', 'show_objects_in_bev_labels_in_camera', 'show_tracks', 'show_detection_performance', 'make_tracking_movie'
+# options are 'bev_from_pcl', 'detect_objects', 'validate_object_labels', 'measure_detection_performance'; options not in the list will be loaded from file
+exec_detection = ['bev_from_pcl', 'detect_objects', 'validate_object_labels', 'measure_detection_performance'] 
+
+# options are 'perform_tracking'
+exec_tracking = [] 
+
+# options are 'show_range_image', 'show_bev', 'show_pcl', 'show_labels_in_image', 'show_objects_and_labels_in_bev', 'show_objects_in_bev_labels_in_camera', 'show_tracks', 'show_detection_performance', 'make_tracking_movie'
+exec_visualization = ['show_range_image'] 
+
 exec_list = make_exec_list(exec_detection, exec_tracking, exec_visualization)
 vis_pause_time = 0 # set pause time between frames in ms (0 = stop between frames until key is pressed)
-
 
 ##################
 ## Perform detection & tracking over all selected frames
@@ -164,7 +173,7 @@ while True:
         ## Performance evaluation for object detection
         if 'measure_detection_performance' in exec_list:
             print('measuring detection performance')
-            det_performance = eval.measure_detection_performance(detections, frame.laser_labels, valid_label_flags, configs_det.min_iou)     
+            det_performance = evals.measure_detection_performance(detections, frame.laser_labels, valid_label_flags, configs_det.min_iou)     
         else:
             print('loading detection performance measures from file')
             # load different data for final project vs. mid-term project
@@ -276,7 +285,7 @@ while True:
 
 ## Evaluate object detection performance
 if 'show_detection_performance' in exec_list:
-    eval.compute_performance_stats(det_performance_all, configs_det)
+    evals.compute_performance_stats(det_performance_all, configs_det)
 
 ## Plot RMSE for all tracks
 if 'show_tracks' in exec_list:
@@ -285,3 +294,4 @@ if 'show_tracks' in exec_list:
 ## Make movie from tracking results    
 if 'make_tracking_movie' in exec_list:
     make_movie(results_fullpath)
+    

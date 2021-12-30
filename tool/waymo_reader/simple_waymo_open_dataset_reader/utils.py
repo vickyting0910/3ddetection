@@ -26,7 +26,7 @@ SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.
 sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
 
 # from simple_waymo_open_dataset_reader import dataset_pb2, label_pb2
-from tools.waymo_reader.simple_waymo_open_dataset_reader import dataset_pb2, label_pb2
+from tool.waymo_reader.simple_waymo_open_dataset_reader import dataset_pb2, label_pb2
 
 
 
