@@ -63,6 +63,7 @@ def show_pcl(lidar_pcl):
         #if action == 1:
         #vis_calls.upate_geometry()
         vis_calls.clear_geometries()
+        #vis_calls.destroy_window() 
         #vis_calls.run()
         #print('right arrow pressed1')
         idx= False
@@ -74,6 +75,7 @@ def show_pcl(lidar_pcl):
     pcd.points = o3d.utility.Vector3dVector(lidar_pcl[:,:3])
     # step 4 : for the first frame, add the pcd instance to visualization using add_geometry; for all other frames, use update_geometry instead
     vis_calls.add_geometry(pcd)
+    #vis_calls.run()
     while idx:
         vis_calls.register_key_callback(262, right_arrow)
         
@@ -81,14 +83,23 @@ def show_pcl(lidar_pcl):
         #vis_calls.register_key_callback(262, right_arrow)
         #while idx == True:
         #    print (idx)
-        vis_calls.poll_events()
+        vis_calls.update_geometry(pcd)
         vis_calls.update_renderer()
+        vis_calls.poll_events()
+        
         #    print (idx)
     vis_calls.run()
+    #idx= True
     #vis_calls.destroy_window()    
     #######
     ####### ID_S1_EX2 END #######
-       
+
+def show_pcl_angle(lidar_pcl):
+    pcd = o3d.geometry.PointCloud()
+    pcd.points = o3d.utility.Vector3dVector(lidar_pcl[:,:3])
+    o3d.visualization.draw_geometries([pcd])
+    #line_set = o3d.geometry.LineSet()
+    #line_set.lines = o3d.utility.Vector2iVector(lines)
 
 # visualize range image
 def show_range_image(frame, lidar_name):
