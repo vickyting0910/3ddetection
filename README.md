@@ -44,7 +44,7 @@ show_only_frames = [0, 1]
 datafile = WaymoDataFileReader(data_filename)
 datafile_iter = iter(datafile)  # initialize dataset iterator
 
-### Pre-processing
+### Pre-processing: Compute Lidar Point-Cloud from Range Image
 
 exec_list = ['show_range_image']: pre-process lidar and range images
 
@@ -59,6 +59,8 @@ exec_list = ['show_range_image']: pre-process lidar and range images
 5. remove the outliers of the intensity channel
 
 6. stack the range and intensity channels
+
+![alt_text](https://github.com/vickyting0910/3dfusion/blob/main/img/range_image.png)
 
 ### Visualization using open3d
 exec_list = ['show_pcl']: visualize point clouds
@@ -75,13 +77,16 @@ exec_list = ['show_pcl']: visualize point clouds
 
 6. close the windows after mouse right click
 
-exec_list = ['show_bev']: 
+![alt_text](https://github.com/vickyting0910/3dfusion/blob/main/img/pointclouds1.png)
 
-exec_list = ['show_labels_in_image']: 
+![alt_text](https://github.com/vickyting0910/3dfusion/blob/main/img/pointclouds2.png)
 
-exec_list = ['show_objects_and_labels_in_bev']: 
+![alt_text](https://github.com/vickyting0910/3dfusion/blob/main/img/pointclouds3.png)
 
-exec_list = ['show_objects_in_bev_labels_in_camera']: 
+![alt_text](https://github.com/vickyting0910/3dfusion/blob/main/img/pointclouds4.png)
+
+![alt_text](https://github.com/vickyting0910/3dfusion/blob/main/img/pointclouds5.png)
+
 
 ### Bird's Eye View (BEV)
 exec_list = ['pcl_from_rangeimage', 'bev_from_pcl']: create the tensor from intensity, height and density layers
@@ -102,6 +107,10 @@ exec_list = ['pcl_from_rangeimage', 'bev_from_pcl']: create the tensor from inte
 
 8. create the tensors
 
+![alt_text](https://github.com/vickyting0910/3dfusion/blob/main/img/intensity.png)
+
+![alt_text](https://github.com/vickyting0910/3dfusion/blob/main/img/height.png)
+
 ### Model-based Object Detection
 
 exec_list = ['pcl_from_rangeimage', 'load_image', 'bev_from_pcl', 'detect_objects', 'show_objects_in_bev_labels_in_camera']
@@ -120,6 +129,10 @@ The model is based on [Super Fast and Accurate 3D Object Detection](https://gith
 
 6. detect objects
 
+![alt_text](https://github.com/vickyting0910/3dfusion/blob/main/img/labels.png)
+
+![alt_text](https://github.com/vickyting0910/3dfusion/blob/main/img/detectedobjects.png)
+
 ### Evaluation
 
 exec_list = ['pcl_from_rangeimage', 'bev_from_pcl', 'detect_objects', 'validate_object_labels', 'measure_detection_performance', 'show_detection_performance']
@@ -130,3 +143,5 @@ exec_list = ['pcl_from_rangeimage', 'bev_from_pcl', 'detect_objects', 'validate_
 
 3. plot the results
 
+precision = 1.0, recall = 1.0
+![alt_text](https://github.com/vickyting0910/3dfusion/blob/main/img/eval.png)
