@@ -1,15 +1,17 @@
-# Writeup: Track 3D-Objects Over Time
 
-Please use this starter template to answer the following questions:
+![alt_text](https://github.com/vickyting0910/3dfusion/blob/main/img/pointclouds1.png)
 
-### 1. Write a short recap of the four tracking steps and what you implemented there (filter, track management, association, camera fusion). Which results did you achieve? Which part of the project was most difficult for you to complete, and why?
+![alt_text](https://github.com/vickyting0910/3dfusion/blob/main/img/pointclouds2.png)
 
+![alt_text](https://github.com/vickyting0910/3dfusion/blob/main/img/pointclouds3.png)
 
-### 2. Do you see any benefits in camera-lidar fusion compared to lidar-only tracking (in theory and in your concrete results)? 
+![alt_text](https://github.com/vickyting0910/3dfusion/blob/main/img/pointclouds4.png)
 
+![alt_text](https://github.com/vickyting0910/3dfusion/blob/main/img/pointclouds5.png)
 
-### 3. Which challenges will a sensor fusion system face in real-life scenarios? Did you see any of these challenges in the project?
+![alt_text](https://github.com/vickyting0910/3dfusion/blob/main/img/pointclouds6.png)
 
+![alt_text](https://github.com/vickyting0910/3dfusion/blob/main/img/pointclouds7.png)
 
-### 4. Can you think of ways to improve your tracking results in the future?
-
+Visually, at least 3 cars can be identified  from the point clouds of different angles. The features are stable over point clouds, height and intensity maps. Also, the observations are stable via model-based object detections.
+ 
